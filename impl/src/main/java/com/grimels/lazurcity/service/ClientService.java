@@ -1,16 +1,16 @@
 package com.grimels.lazurcity.service;
 
-import com.grimels.lazurcityapi.model.ClientDTO;
+import com.grimels.lazurcityapi.model.Client;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ClientService {
 
-    List<ClientDTO> findAll();
+    List<Client> findAll();
 
-    Optional<ClientDTO> findById(int clientId);
+    Optional<Client> findById(int clientId);
 
-    ClientDTO saveClient(ClientDTO clientEntity);
+    Client saveClient(Client clientEntity);
 
 }

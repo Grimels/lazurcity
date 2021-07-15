@@ -1,16 +1,19 @@
 package com.grimels.lazurcity.service;
 
-import com.grimels.lazurcityapi.model.RoomDTO;
+import com.grimels.lazurcityapi.model.Room;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface RoomService {
 
-    List<RoomDTO> findAll();
+    List<Room> findAll();
 
-    Optional<RoomDTO> findById(int roomId);
+    Optional<Room> findById(int roomId);
 
-    RoomDTO saveRoom(RoomDTO roomEntity);
+    Room saveRoom(Room roomEntity);
+
+    Set<String> findAllRoomTypes();
 
 }

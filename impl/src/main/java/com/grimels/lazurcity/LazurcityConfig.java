@@ -9,14 +9,13 @@ import com.grimels.lazurcity.mapper.RoomMapper;
 import com.grimels.lazurcity.repository.AccommodationRepository;
 import com.grimels.lazurcity.repository.ClientRepository;
 import com.grimels.lazurcity.repository.RoomRepository;
-import com.grimels.lazurcity.repository.RoomTypeRepository;
 import com.grimels.lazurcity.service.AccommodationService;
 import com.grimels.lazurcity.service.ClientService;
 import com.grimels.lazurcity.service.RoomService;
 import com.grimels.lazurcity.service.impl.AccommodationServiceImpl;
 import com.grimels.lazurcity.service.impl.ClientServiceImpl;
 import com.grimels.lazurcity.service.impl.RoomServiceImpl;
-import com.grimels.lazurcity.validation.AccommodationValidation;
+import com.grimels.lazurcity.validation.AccommodationValidator;
 import com.grimels.lazurcityapi.controller.AccommodationsController;
 import com.grimels.lazurcityapi.controller.ClientsController;
 import com.grimels.lazurcityapi.controller.RoomsController;
@@ -32,9 +31,8 @@ public class LazurcityConfig {
 
     @Bean
     public RoomService roomService(RoomRepository roomRepository,
-                                   RoomTypeRepository roomTypeRepository,
                                    RoomMapper roomMapper) {
-        return new RoomServiceImpl(roomRepository, roomTypeRepository, roomMapper);
+        return new RoomServiceImpl(roomRepository, roomMapper);
     }
 
     @Bean
@@ -55,14 +53,22 @@ public class LazurcityConfig {
 
     @Bean
     public AccommodationService accommodationService(AccommodationRepository accommodationRepository,
+                                                     ClientRepository clientRepository,
+                                                     RoomRepository roomRepository,
                                                      AccommodationMapper accommodationMapper,
-                                                     AccommodationValidation accommodationValidation) {
-        return new AccommodationServiceImpl(accommodationRepository, accommodationMapper, accommodationValidation);
+                                                     AccommodationValidator accommodationValidator) {
+        return new AccommodationServiceImpl(
+            accommodationRepository,
+            clientRepository,
+            roomRepository,
+            accommodationMapper,
+            accommodationValidator
+        );
     }
 
     @Bean
-    public AccommodationValidation accommodationValidation() {
-        return new AccommodationValidation();
+    public AccommodationValidator accommodationValidation() {
+        return new AccommodationValidator();
     }
 
     @Bean

@@ -4,7 +4,7 @@ import com.grimels.lazurcity.entity.ClientEntity;
 import com.grimels.lazurcity.mapper.ClientMapper;
 import com.grimels.lazurcity.repository.ClientRepository;
 import com.grimels.lazurcity.service.ClientService;
-import com.grimels.lazurcityapi.model.ClientDTO;
+import com.grimels.lazurcityapi.model.Client;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -23,25 +23,25 @@ public class ClientServiceImpl implements ClientService {
     private ClientMapper clientMapper;
 
     @Override
-    public List<ClientDTO> findAll() {
+    public List<Client> findAll() {
         return clientRepository.findAll().stream()
-            .map(clientMapper::toClientDTO)
+            .map(clientMapper::fromClientEntity)
             .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<ClientDTO> findById(int clientId) {
+    public Optional<Client> findById(int clientId) {
         return clientRepository.findById(clientId)
-            .map(clientMapper::toClientDTO);
+            .map(clientMapper::fromClientEntity);
     }
 
     @Override
     @Transactional
-    public ClientDTO saveClient(ClientDTO clientCreationRequest) {
+    public Client saveClient(Client clientCreationRequest) {
         ClientEntity clientEntity = clientMapper.toClientEntity(clientCreationRequest);
         ClientEntity savedClient = clientRepository.save(clientEntity);
 
-        return clientMapper.toClientDTO(savedClient);
+        return clientMapper.fromClientEntity(savedClient);
     }
 
 }
