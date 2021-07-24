@@ -31,8 +31,9 @@ public class LazurcityConfig {
 
     @Bean
     public RoomService roomService(RoomRepository roomRepository,
-                                   RoomMapper roomMapper) {
-        return new RoomServiceImpl(roomRepository, roomMapper);
+                                   RoomMapper roomMapper,
+                                   AccommodationMapper accommodationMapper) {
+        return new RoomServiceImpl(roomRepository, roomMapper, accommodationMapper);
     }
 
     @Bean

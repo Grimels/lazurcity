@@ -10,6 +10,8 @@ public interface RoomService {
 
     List<Room> findAll();
 
+    List<Room> findAll(boolean isBusy);
+
     Optional<Room> findById(int roomId);
 
     Room saveRoom(Room roomEntity);

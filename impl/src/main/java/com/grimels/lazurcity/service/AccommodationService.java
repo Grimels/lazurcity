@@ -12,6 +12,8 @@ public interface AccommodationService {
 
     List<Accommodation> findAll(Date startDate, Date endDate);
 
+    List<Accommodation> findAll(Date date);
+
     Accommodation saveAccommodation(CreateAccommodationRequest accommodationCreationRequest);
 
 }

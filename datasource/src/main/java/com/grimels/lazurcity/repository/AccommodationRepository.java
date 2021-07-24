@@ -14,8 +14,15 @@ public interface AccommodationRepository extends JpaRepository<AccommodationEnti
     @Query(
         value = "SELECT AE " +
             "FROM AccommodationEntity AE " +
-            "WHERE (AE.startDate BETWEEN ?1 AND ?2) OR (AE.endDate BETWEEN ?1 AND ?2)"
+            "WHERE (?1 BETWEEN AE.startDate AND AE.endDate) OR (?2 BETWEEN AE.startDate AND AE.endDate)"
     )
     List<AccommodationEntity> findAllByDateInRange(Date startDate, Date endDate);
+
+    @Query(
+        value = "SELECT AE " +
+            "FROM AccommodationEntity AE " +
+            "WHERE (?1 BETWEEN AE.startDate AND AE.endDate)"
+    )
+    List<AccommodationEntity> findAllByDate(Date date);
 
 }

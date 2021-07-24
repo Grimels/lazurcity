@@ -10,8 +10,6 @@ import lombok.Data;
 import java.util.Date;
 import java.util.List;
 
-import static java.util.Objects.nonNull;
-
 @Data
 @AllArgsConstructor
 public class AccommodationsControllerImpl implements AccommodationsController {
@@ -19,11 +17,18 @@ public class AccommodationsControllerImpl implements AccommodationsController {
     private AccommodationService accommodationService;
 
     @Override
-    public List<Accommodation> getAccommodations(Date startDate, Date endDate) {
-        if (nonNull(startDate)) {
-            return accommodationService.findAll(startDate, endDate);
-        }
+    public List<Accommodation> getAccommodations() {
         return accommodationService.findAll();
+    }
+
+    @Override
+    public List<Accommodation> getAccommodationsExistedByDate(Date date) {
+        return accommodationService.findAll(date);
+    }
+
+    @Override
+    public List<Accommodation> getAccommodationsExistedInDateRange(Date startDate, Date endDate) {
+        return accommodationService.findAll(startDate, endDate);
     }
 
     @Override

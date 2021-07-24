@@ -46,6 +46,13 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
+    public List<Accommodation> findAll(Date date) {
+        return accommodationRepository.findAllByDate(date).stream()
+                .map(accommodationMapper::fromAccommodationEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional
     public Accommodation saveAccommodation(CreateAccommodationRequest accommodationCreationRequest) {
         ClientEntity client
