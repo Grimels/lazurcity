@@ -10,7 +10,9 @@ public interface RoomService {
 
     List<Room> findAll();
 
-    List<Room> findAll(boolean isBusy);
+    List<Room> findAllFree();
+
+    List<Room> findAllBusy();
 
     Optional<Room> findById(int roomId);
 

@@ -2,11 +2,10 @@ package com.grimels.lazurcity.util;
 
 import com.grimels.lazurcity.entity.AccommodationEntity;
 import com.grimels.lazurcity.entity.RoomEntity;
-import com.grimels.lazurcityapi.model.Accommodation;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Date;
-import java.util.Optional;
 
 import static org.apache.commons.collections4.SetUtils.emptyIfNull;
 
@@ -22,6 +21,12 @@ public class RoomsUtil {
 
     public static Boolean isFreeRoom(RoomEntity roomEntity) {
         return !isBusyRoom(roomEntity);
+    }
+
+    public static AccommodationEntity getLatestAccommodationEntity(RoomEntity roomEntity) {
+        return CollectionUtils.emptyIfNull(roomEntity.getAccommodationList()).stream()
+                .max((a1, a2) -> a1.getStartDate().after(a2.getStartDate()) ? 1 : 0)
+                .orElse(null);
     }
 
 }

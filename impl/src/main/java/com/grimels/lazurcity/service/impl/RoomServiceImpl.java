@@ -1,6 +1,5 @@
 package com.grimels.lazurcity.service.impl;
 
-import com.grimels.lazurcity.entity.AccommodationEntity;
 import com.grimels.lazurcity.entity.RoomEntity;
 import com.grimels.lazurcity.mapper.AccommodationMapper;
 import com.grimels.lazurcity.mapper.RoomMapper;
@@ -18,8 +17,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
-
 @Service
 @Data
 @AllArgsConstructor
@@ -32,23 +29,23 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public List<Room> findAll() {
         return roomRepository.findAll().stream()
-                .map(roomEntity -> roomMapper.fromRoomEntity(
-                        roomEntity,
-                        accommodationMapper.toAccommodationProjection(getLatestAccommodationEntity(roomEntity))
-                ))
+                .map(roomMapper::fromRoomEntity)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Room> findAll(boolean isBusy) {
+    public List<Room> findAllFree() {
         return roomRepository.findAll().stream()
-                .filter(roomEntity -> isBusy
-                        ? RoomsUtil.isBusyRoom(roomEntity)
-                        : RoomsUtil.isFreeRoom(roomEntity))
-                .map(roomEntity -> roomMapper.fromRoomEntity(
-                        roomEntity,
-                        accommodationMapper.toAccommodationProjection(getLatestAccommodationEntity(roomEntity))
-                ))
+                .filter(RoomsUtil::isFreeRoom)
+                .map(roomEntity -> roomMapper.fromRoomEntity(roomEntity, false))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Room> findAllBusy() {
+        return roomRepository.findAll().stream()
+                .filter(RoomsUtil::isBusyRoom)
+                .map(roomEntity -> roomMapper.fromRoomEntity(roomEntity, true))
                 .collect(Collectors.toList());
     }
 
@@ -71,12 +68,6 @@ public class RoomServiceImpl implements RoomService {
         return roomRepository.findAll().stream()
                 .map(RoomEntity::getType)
                 .collect(Collectors.toSet());
-    }
-
-    private AccommodationEntity getLatestAccommodationEntity(RoomEntity roomEntity) {
-        return emptyIfNull(roomEntity.getAccommodationList()).stream()
-                .max((a1, a2) -> a1.getStartDate().after(a2.getStartDate()) ? 1 : 0)
-                .orElse(null);
     }
 
 }

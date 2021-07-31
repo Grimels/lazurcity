@@ -24,10 +24,10 @@ import java.util.Objects;
 public class AccommodationEntity extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "clientId", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
     private ClientEntity client;
     @ManyToOne
-    @JoinColumn(name = "roomId", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "room_id", referencedColumnName = "id", nullable = false)
     private RoomEntity room;
 
     @Column(name = "price")

@@ -11,8 +11,6 @@ import lombok.Data;
 import java.util.List;
 import java.util.Set;
 
-import static java.util.Objects.nonNull;
-
 @Data
 @AllArgsConstructor
 public class RoomsControllerImpl implements RoomsController {
@@ -20,11 +18,18 @@ public class RoomsControllerImpl implements RoomsController {
     private RoomService roomService;
 
     @Override
-    public List<Room> getRooms(Boolean isBusy) {
-        if (nonNull(isBusy)) {
-            return roomService.findAll(isBusy);
-        }
+    public List<Room> getRooms() {
         return roomService.findAll();
+    }
+
+    @Override
+    public List<Room> getFreeRooms() {
+        return roomService.findAllFree();
+    }
+
+    @Override
+    public List<Room> getBusyRooms() {
+        return roomService.findAllBusy();
     }
 
     @Override

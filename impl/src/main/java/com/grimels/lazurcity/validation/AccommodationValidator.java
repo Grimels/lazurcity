@@ -13,9 +13,9 @@ import java.util.function.Predicate;
 
 public class AccommodationValidator {
     private static final String INVALID_END_DATE_ERROR_MSG
-        = "Invalid accommodation dates: start date '%s' is greater than end date '%s'.";
+            = "Invalid accommodation dates: start date '%s' is greater than end date '%s'.";
     private static final String INVALID_ACCOMMODATION_DATE_ERROR_MSG
-        = "Invalid accommodation dates: start date '%s' is not available because of the already existing accommodation.";
+            = "Invalid accommodation dates: start date '%s' is not available because of the already existing accommodation.";
 
     public void validate(CreateAccommodationRequest createAccommodationRequest, ClientEntity clientEntity, RoomEntity roomEntity) {
         Date startDate = createAccommodationRequest.getStartDate();
@@ -35,7 +35,7 @@ public class AccommodationValidator {
     private boolean isRoomNotAvailableForDate(RoomEntity roomEntity, Date startDate) {
         Set<AccommodationEntity> accommodationList = roomEntity.getAccommodationList();
         return accommodationList.stream()
-            .anyMatch(isAccommodationNotAvailableForDate(startDate));
+                .anyMatch(isAccommodationNotAvailableForDate(startDate));
     }
 
     private Predicate<AccommodationEntity> isAccommodationNotAvailableForDate(Date startDate) {
