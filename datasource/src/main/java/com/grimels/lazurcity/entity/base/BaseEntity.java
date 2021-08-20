@@ -5,12 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import java.sql.Date;
+import javax.persistence.*;
+import java.time.LocalDate;
 
 @Data
 @SuperBuilder
@@ -24,9 +20,9 @@ public abstract class BaseEntity {
     private Integer id;
 
     @Column(name = "created_at")
-    private Date createdDate;
+    private LocalDate createdDate;
 
     @Column(name = "modified_at")
-    private Date modifiedDate;
+    private LocalDate modifiedDate;
 
 }

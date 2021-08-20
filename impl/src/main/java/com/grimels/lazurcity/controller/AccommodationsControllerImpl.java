@@ -1,13 +1,16 @@
 package com.grimels.lazurcity.controller;
 
+import com.grimels.lazurcity.exception.NotFoundStatusException;
 import com.grimels.lazurcity.service.AccommodationService;
 import com.grimels.lazurcityapi.controller.AccommodationsController;
 import com.grimels.lazurcityapi.model.Accommodation;
+import com.grimels.lazurcityapi.model.history.RoomAccommodationsHistory;
 import com.grimels.lazurcityapi.model.request.CreateAccommodationRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -22,12 +25,17 @@ public class AccommodationsControllerImpl implements AccommodationsController {
     }
 
     @Override
-    public List<Accommodation> getAccommodationsExistedByDate(Date date) {
+    public List<RoomAccommodationsHistory> getRoomsAccommodationsHistoryInRange(LocalDate startDate, LocalDate endDate) {
+        return accommodationService.getRoomsAccommodationsHistory(startDate, endDate);
+    }
+
+    @Override
+    public List<Accommodation> getAccommodationsExistedByDate(LocalDate date) {
         return accommodationService.findAll(date);
     }
 
     @Override
-    public List<Accommodation> getAccommodationsExistedInDateRange(Date startDate, Date endDate) {
+    public List<Accommodation> getAccommodationsExistedInDateRange(LocalDate startDate, LocalDate endDate) {
         return accommodationService.findAll(startDate, endDate);
     }
 

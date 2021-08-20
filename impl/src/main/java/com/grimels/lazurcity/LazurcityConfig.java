@@ -57,13 +57,15 @@ public class LazurcityConfig {
                                                      ClientRepository clientRepository,
                                                      RoomRepository roomRepository,
                                                      AccommodationMapper accommodationMapper,
+                                                     RoomMapper roomMapper,
                                                      AccommodationValidator accommodationValidator) {
         return new AccommodationServiceImpl(
-            accommodationRepository,
-            clientRepository,
-            roomRepository,
-            accommodationMapper,
-            accommodationValidator
+                accommodationRepository,
+                clientRepository,
+                roomRepository,
+                accommodationMapper,
+                roomMapper,
+                accommodationValidator
         );
     }
 

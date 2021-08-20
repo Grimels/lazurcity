@@ -2,6 +2,7 @@ package com.grimels.lazurcity.mapper;
 
 import com.grimels.lazurcity.entity.RoomEntity;
 import com.grimels.lazurcityapi.model.Room;
+import com.grimels.lazurcityapi.model.history.RoomInfo;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,6 +18,8 @@ public interface RoomMapper {
     @Mapping(source = "isBusy", target = "isBusy")
     @Mapping(source = "roomEntity.accommodationList", target = "accommodations")
     Room fromRoomEntity(RoomEntity roomEntity, Boolean isBusy);
+
+    RoomInfo toRoomInfo(RoomEntity roomEntity);
 
     @Mapping(source = "room.id", target = "id")
     @Mapping(source = "room.createdDate", target = "createdDate")

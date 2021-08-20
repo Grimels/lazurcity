@@ -7,6 +7,7 @@ import com.grimels.lazurcity.repository.RoomRepository;
 import com.grimels.lazurcity.service.RoomService;
 import com.grimels.lazurcity.util.RoomsUtil;
 import com.grimels.lazurcityapi.model.Room;
+import com.grimels.lazurcityapi.model.history.RoomInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,12 @@ public class RoomServiceImpl implements RoomService {
     public Optional<Room> findById(int roomId) {
         return roomRepository.findById(roomId)
                 .map(roomMapper::fromRoomEntity);
+    }
+
+    @Override
+    public Optional<RoomInfo> findInfoById(int roomId) {
+        return Optional.of(roomRepository.getById(roomId))
+                .map(roomMapper::toRoomInfo);
     }
 
     @Override

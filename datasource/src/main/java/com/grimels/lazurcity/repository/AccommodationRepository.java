@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -16,13 +17,15 @@ public interface AccommodationRepository extends JpaRepository<AccommodationEnti
             "FROM AccommodationEntity AE " +
             "WHERE (?1 BETWEEN AE.startDate AND AE.endDate) OR (?2 BETWEEN AE.startDate AND AE.endDate)"
     )
-    List<AccommodationEntity> findAllByDateInRange(Date startDate, Date endDate);
+    List<AccommodationEntity> findAllByDateInRange(LocalDate startDate, LocalDate endDate);
 
     @Query(
         value = "SELECT AE " +
             "FROM AccommodationEntity AE " +
             "WHERE (?1 BETWEEN AE.startDate AND AE.endDate)"
     )
-    List<AccommodationEntity> findAllByDate(Date date);
+    List<AccommodationEntity> findAllByDate(LocalDate date);
+
+    List<AccommodationEntity> findAllByRoomId(Integer roomId);
 
 }

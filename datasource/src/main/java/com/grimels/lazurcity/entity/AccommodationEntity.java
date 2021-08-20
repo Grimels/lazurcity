@@ -7,12 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import java.util.Date;
+import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -35,9 +31,9 @@ public class AccommodationEntity extends BaseEntity {
     @Column(name = "is_final")
     private Boolean isFinal;
     @Column(name = "start_date")
-    private Date startDate;
+    private LocalDate startDate;
     @Column(name = "end_date")
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column(name = "quantity")
     private Integer quantity;
