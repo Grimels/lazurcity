@@ -23,7 +23,7 @@ public interface AccommodationMapper {
         entity.setRoom(roomEntity);
         entity.setStartDate(createAccommodationRequest.getStartDate());
         entity.setEndDate(createAccommodationRequest.getEndDate());
-        entity.setPrice(createAccommodationRequest.getPrice());
+        entity.setPrice(createAccommodationRequest.getPrice().doubleValue());
         entity.setQuantity(createAccommodationRequest.getQuantity());
 
         return entity;

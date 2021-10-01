@@ -36,6 +36,18 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public Optional<Client> findFirstByName(String clientName) {
+        return clientRepository.findFirstByName(clientName)
+                .map(clientMapper::fromClientEntity);
+    }
+
+    @Override
+    public Optional<Client> findFirstByPhoneNumber(String phoneNumber) {
+        return clientRepository.findFirstByPhoneNumber(phoneNumber)
+                .map(clientMapper::fromClientEntity);
+    }
+
+    @Override
     @Transactional
     public Client saveClient(Client clientCreationRequest) {
         ClientEntity clientEntity = clientMapper.toClientEntity(clientCreationRequest);

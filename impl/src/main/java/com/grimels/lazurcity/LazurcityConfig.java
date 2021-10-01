@@ -54,6 +54,7 @@ public class LazurcityConfig {
 
     @Bean
     public AccommodationService accommodationService(AccommodationRepository accommodationRepository,
+                                                     ClientService clientService,
                                                      ClientRepository clientRepository,
                                                      RoomRepository roomRepository,
                                                      AccommodationMapper accommodationMapper,
@@ -61,6 +62,7 @@ public class LazurcityConfig {
                                                      AccommodationValidator accommodationValidator) {
         return new AccommodationServiceImpl(
                 accommodationRepository,
+                clientService,
                 clientRepository,
                 roomRepository,
                 accommodationMapper,

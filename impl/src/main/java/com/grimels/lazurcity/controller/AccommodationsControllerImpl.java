@@ -1,14 +1,13 @@
 package com.grimels.lazurcity.controller;
 
-import com.grimels.lazurcity.exception.NotFoundStatusException;
 import com.grimels.lazurcity.service.AccommodationService;
 import com.grimels.lazurcityapi.controller.AccommodationsController;
 import com.grimels.lazurcityapi.model.Accommodation;
 import com.grimels.lazurcityapi.model.history.RoomAccommodationsHistory;
 import com.grimels.lazurcityapi.model.request.CreateAccommodationRequest;
+import com.grimels.lazurcityapi.model.request.UpdateAccommodationRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,6 +41,16 @@ public class AccommodationsControllerImpl implements AccommodationsController {
     @Override
     public Accommodation saveAccommodation(CreateAccommodationRequest accommodationCreationRequest) {
         return accommodationService.saveAccommodation(accommodationCreationRequest);
+    }
+
+    @Override
+    public void updateAccommodation(Integer accommodationId, UpdateAccommodationRequest updateAccommodationRequest) {
+        accommodationService.updateAccommodation(accommodationId, updateAccommodationRequest);
+    }
+
+    @Override
+    public void deleteAccommodation(Integer accommodationId) {
+        accommodationService.deleteAccommodation(accommodationId);
     }
 
 }

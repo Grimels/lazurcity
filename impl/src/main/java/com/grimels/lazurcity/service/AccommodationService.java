@@ -4,6 +4,7 @@ import com.grimels.lazurcity.entity.RoomEntity;
 import com.grimels.lazurcityapi.model.Accommodation;
 import com.grimels.lazurcityapi.model.history.RoomAccommodationsHistory;
 import com.grimels.lazurcityapi.model.request.CreateAccommodationRequest;
+import com.grimels.lazurcityapi.model.request.UpdateAccommodationRequest;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -24,5 +25,9 @@ public interface AccommodationService {
     List<Accommodation> findAll(Integer roomId);
 
     Accommodation saveAccommodation(CreateAccommodationRequest accommodationCreationRequest);
+
+    void updateAccommodation(Integer accommodationId, UpdateAccommodationRequest updateAccommodationRequest);
+
+    void deleteAccommodation(Integer accommodationId);
 
 }

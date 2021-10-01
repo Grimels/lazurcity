@@ -3,21 +3,28 @@ package com.grimels.lazurcity.service.impl;
 import com.grimels.lazurcity.entity.AccommodationEntity;
 import com.grimels.lazurcity.entity.ClientEntity;
 import com.grimels.lazurcity.entity.RoomEntity;
+import com.grimels.lazurcity.exception.NotFoundStatusException;
 import com.grimels.lazurcity.mapper.AccommodationMapper;
 import com.grimels.lazurcity.mapper.RoomMapper;
 import com.grimels.lazurcity.repository.AccommodationRepository;
 import com.grimels.lazurcity.repository.ClientRepository;
 import com.grimels.lazurcity.repository.RoomRepository;
 import com.grimels.lazurcity.service.AccommodationService;
+import com.grimels.lazurcity.service.ClientService;
 import com.grimels.lazurcity.util.DateUtil;
 import com.grimels.lazurcity.validation.AccommodationValidator;
 import com.grimels.lazurcityapi.model.Accommodation;
+import com.grimels.lazurcityapi.model.Client;
 import com.grimels.lazurcityapi.model.history.AccommodationInfo;
 import com.grimels.lazurcityapi.model.history.RoomAccommodationsHistory;
 import com.grimels.lazurcityapi.model.request.CreateAccommodationRequest;
+import com.grimels.lazurcityapi.model.request.UpdateAccommodationRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -25,12 +32,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 @Service
 @Data
 @AllArgsConstructor
 public class AccommodationServiceImpl implements AccommodationService {
 
     private AccommodationRepository accommodationRepository;
+    private ClientService clientService;
     private ClientRepository clientRepository;
     private RoomRepository roomRepository;
     private AccommodationMapper accommodationMapper;
@@ -83,6 +94,9 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .daysLeft(daysLeft)
                 .client(accommodation.getClient())
                 .price(accommodation.getPrice())
+                .roomName(accommodation.getRoom().getName())
+                .quantity(accommodation.getQuantity())
+                .roomId(accommodation.getRoom().getId())
                 .build();
     }
 
@@ -103,19 +117,57 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     @Transactional
     public Accommodation saveAccommodation(CreateAccommodationRequest accommodationCreationRequest) {
-        ClientEntity client
-                = clientRepository.getById(accommodationCreationRequest.getClientId());
+        Client client
+                = clientService.findFirstByName(accommodationCreationRequest.getClientName())
+                .orElse(clientService.findFirstByPhoneNumber(accommodationCreationRequest.getClientPhoneNumber())
+                        .orElse(null));
+        if (isNull(client)) {
+            Client creationRequest = Client.builder()
+                    .name(accommodationCreationRequest.getClientName())
+                    .phoneNumber(accommodationCreationRequest.getClientPhoneNumber())
+                    .build();
+            client = clientService.saveClient(creationRequest);
+        }
+
         RoomEntity room
-                = roomRepository.getById(accommodationCreationRequest.getClientId());
+                = roomRepository.getById(accommodationCreationRequest.getRoomId());
 
         accommodationValidator.validate(accommodationCreationRequest, client, room);
 
+        ClientEntity clientEntity = clientRepository.getById(client.getId());
         AccommodationEntity accommodationEntity
-                = accommodationMapper.toAccommodationEntity(accommodationCreationRequest, client, room);
+                = accommodationMapper.toAccommodationEntity(accommodationCreationRequest, clientEntity, room);
         AccommodationEntity savedAccommodation
                 = accommodationRepository.save(accommodationEntity);
 
         return accommodationMapper.fromAccommodationEntity(savedAccommodation);
+    }
+
+    @Override
+    public void updateAccommodation(Integer accommodationId, UpdateAccommodationRequest updateAccommodationRequest) {
+        AccommodationEntity accommodation = accommodationRepository.findById(accommodationId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not find accommodation"));
+
+        if (nonNull(updateAccommodationRequest.getStartDate())) {
+            accommodation.setStartDate(updateAccommodationRequest.getStartDate());
+        }
+        if (nonNull(updateAccommodationRequest.getEndDate())) {
+            accommodation.setEndDate(updateAccommodationRequest.getEndDate());
+        }
+
+        if (nonNull(updateAccommodationRequest.getQuantity())) {
+            accommodation.setQuantity(updateAccommodationRequest.getQuantity());
+        }
+        if (nonNull(updateAccommodationRequest.getPrice())) {
+            accommodation.setPrice(updateAccommodationRequest.getPrice().doubleValue());
+        }
+
+        accommodationRepository.save(accommodation);
+    }
+
+    @Override
+    public void deleteAccommodation(Integer accommodationId) {
+        accommodationRepository.deleteById(accommodationId);
     }
 
 }
