@@ -1,9 +1,12 @@
 package com.grimels.lazurcity.service.impl;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.grimels.lazurcity.entity.AccommodationEntity;
 import com.grimels.lazurcity.entity.ClientEntity;
 import com.grimels.lazurcity.entity.RoomEntity;
-import com.grimels.lazurcity.exception.NotFoundStatusException;
+import com.grimels.lazurcity.manager.AccommodationStatisticsManager;
 import com.grimels.lazurcity.mapper.AccommodationMapper;
 import com.grimels.lazurcity.mapper.RoomMapper;
 import com.grimels.lazurcity.repository.AccommodationRepository;
@@ -19,17 +22,22 @@ import com.grimels.lazurcityapi.model.history.AccommodationInfo;
 import com.grimels.lazurcityapi.model.history.RoomAccommodationsHistory;
 import com.grimels.lazurcityapi.model.request.CreateAccommodationRequest;
 import com.grimels.lazurcityapi.model.request.UpdateAccommodationRequest;
+import com.grimels.lazurcityapi.model.statistics.AccommodationStatistics;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -168,6 +176,14 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public void deleteAccommodation(Integer accommodationId) {
         accommodationRepository.deleteById(accommodationId);
+    }
+
+    @Override
+    public AccommodationStatistics getAccommodationStatistics(LocalDate startDate, LocalDate endDate, LocalDate date) {
+        List<RoomEntity> rooms = roomRepository.findAll();
+        AccommodationStatisticsManager statisticsManager = new AccommodationStatisticsManager(startDate, endDate, rooms);
+
+        return statisticsManager.getStatistics(date);
     }
 
 }

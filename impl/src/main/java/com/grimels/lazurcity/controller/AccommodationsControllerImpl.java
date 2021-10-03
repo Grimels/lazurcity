@@ -6,6 +6,7 @@ import com.grimels.lazurcityapi.model.Accommodation;
 import com.grimels.lazurcityapi.model.history.RoomAccommodationsHistory;
 import com.grimels.lazurcityapi.model.request.CreateAccommodationRequest;
 import com.grimels.lazurcityapi.model.request.UpdateAccommodationRequest;
+import com.grimels.lazurcityapi.model.statistics.AccommodationStatistics;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -51,6 +52,11 @@ public class AccommodationsControllerImpl implements AccommodationsController {
     @Override
     public void deleteAccommodation(Integer accommodationId) {
         accommodationService.deleteAccommodation(accommodationId);
+    }
+
+    @Override
+    public AccommodationStatistics getStatistics(LocalDate startDate, LocalDate endDate, LocalDate date) {
+        return accommodationService.getAccommodationStatistics(startDate, endDate, date);
     }
 
 }

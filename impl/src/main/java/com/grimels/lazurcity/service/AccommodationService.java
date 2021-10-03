@@ -5,9 +5,9 @@ import com.grimels.lazurcityapi.model.Accommodation;
 import com.grimels.lazurcityapi.model.history.RoomAccommodationsHistory;
 import com.grimels.lazurcityapi.model.request.CreateAccommodationRequest;
 import com.grimels.lazurcityapi.model.request.UpdateAccommodationRequest;
+import com.grimels.lazurcityapi.model.statistics.AccommodationStatistics;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public interface AccommodationService {
@@ -29,5 +29,7 @@ public interface AccommodationService {
     void updateAccommodation(Integer accommodationId, UpdateAccommodationRequest updateAccommodationRequest);
 
     void deleteAccommodation(Integer accommodationId);
+
+    AccommodationStatistics getAccommodationStatistics(LocalDate startDate, LocalDate endDate, LocalDate date);
 
 }

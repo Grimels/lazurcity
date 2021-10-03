@@ -26,6 +26,13 @@ public interface AccommodationRepository extends JpaRepository<AccommodationEnti
     )
     List<AccommodationEntity> findAllByDate(LocalDate date);
 
+    @Query(
+        value = "SELECT AE " +
+            "FROM AccommodationEntity AE " +
+            "WHERE FUNCTION('YEAR', AE.startDate ) = ?1 AND FUNCTION('YEAR', AE.endDate) = ?1"
+    )
+    List<AccommodationEntity> findAllByYear(int year);
+
     List<AccommodationEntity> findAllByRoomId(Integer roomId);
 
 }
