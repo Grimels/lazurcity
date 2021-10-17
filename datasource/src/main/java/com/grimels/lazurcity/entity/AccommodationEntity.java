@@ -38,6 +38,9 @@ public class AccommodationEntity extends BaseEntity {
     @Column(name = "quantity")
     private Integer quantity;
 
+    @Column(name = "comment")
+    private String comment;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

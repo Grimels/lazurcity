@@ -89,7 +89,7 @@ public class AccommodationStatisticsManager {
                         totalPrice + calculateAccommodationIncome(accommodation.getPrice(), accommodation.getStartDate(), accommodation.getEndDate()), Long::sum);
     }
 
-    private long calculateAccommodationIncome(Double price, LocalDate startDate, LocalDate endDate) {
+    private Long calculateAccommodationIncome(Double price, LocalDate startDate, LocalDate endDate) {
         return (startDate.datesUntil(endDate).count() * price.longValue());
     }
 

@@ -59,6 +59,7 @@ public class LazurcityConfig {
                                                      RoomRepository roomRepository,
                                                      AccommodationMapper accommodationMapper,
                                                      RoomMapper roomMapper,
+                                                     ClientMapper clientMapper,
                                                      AccommodationValidator accommodationValidator) {
         return new AccommodationServiceImpl(
                 accommodationRepository,
@@ -67,6 +68,7 @@ public class LazurcityConfig {
                 roomRepository,
                 accommodationMapper,
                 roomMapper,
+                clientMapper,
                 accommodationValidator
         );
     }

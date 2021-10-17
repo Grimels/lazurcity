@@ -8,6 +8,7 @@ import com.grimels.lazurcity.entity.ClientEntity;
 import com.grimels.lazurcity.entity.RoomEntity;
 import com.grimels.lazurcity.manager.AccommodationStatisticsManager;
 import com.grimels.lazurcity.mapper.AccommodationMapper;
+import com.grimels.lazurcity.mapper.ClientMapper;
 import com.grimels.lazurcity.mapper.RoomMapper;
 import com.grimels.lazurcity.repository.AccommodationRepository;
 import com.grimels.lazurcity.repository.ClientRepository;
@@ -39,9 +40,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
 @Data
@@ -54,6 +57,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private RoomRepository roomRepository;
     private AccommodationMapper accommodationMapper;
     private RoomMapper roomMapper;
+    private ClientMapper clientMapper;
     private AccommodationValidator accommodationValidator;
 
     @Override
@@ -124,50 +128,43 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     @Transactional
-    public Accommodation saveAccommodation(CreateAccommodationRequest accommodationCreationRequest) {
-        Client client
-                = clientService.findFirstByName(accommodationCreationRequest.getClientName())
-                .orElse(clientService.findFirstByPhoneNumber(accommodationCreationRequest.getClientPhoneNumber())
-                        .orElse(null));
-        if (isNull(client)) {
-            Client creationRequest = Client.builder()
-                    .name(accommodationCreationRequest.getClientName())
-                    .phoneNumber(accommodationCreationRequest.getClientPhoneNumber())
-                    .build();
-            client = clientService.saveClient(creationRequest);
-        }
-
-        RoomEntity room
-                = roomRepository.getById(accommodationCreationRequest.getRoomId());
-
-        accommodationValidator.validate(accommodationCreationRequest, client, room);
+    public Accommodation saveAccommodation(CreateAccommodationRequest request) {
+        Client client = getOrCreateClient(request.getClientName(), request.getClientPhoneNumber());
+        RoomEntity room = roomRepository.getById(request.getRoomId());
+        accommodationValidator.validate(request, client, room);
 
         ClientEntity clientEntity = clientRepository.getById(client.getId());
-        AccommodationEntity accommodationEntity
-                = accommodationMapper.toAccommodationEntity(accommodationCreationRequest, clientEntity, room);
-        AccommodationEntity savedAccommodation
-                = accommodationRepository.save(accommodationEntity);
+        AccommodationEntity accommodationEntity = accommodationMapper
+                .toAccommodationEntity(request, clientEntity, room);
+        AccommodationEntity savedAccommodation = accommodationRepository
+                .save(accommodationEntity);
 
         return accommodationMapper.fromAccommodationEntity(savedAccommodation);
     }
 
     @Override
-    public void updateAccommodation(Integer accommodationId, UpdateAccommodationRequest updateAccommodationRequest) {
+    public void updateAccommodation(Integer accommodationId, UpdateAccommodationRequest request) {
         AccommodationEntity accommodation = accommodationRepository.findById(accommodationId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not find accommodation"));
 
-        if (nonNull(updateAccommodationRequest.getStartDate())) {
-            accommodation.setStartDate(updateAccommodationRequest.getStartDate());
+        if (nonNull(request.getStartDate())) {
+            accommodation.setStartDate(request.getStartDate());
         }
-        if (nonNull(updateAccommodationRequest.getEndDate())) {
-            accommodation.setEndDate(updateAccommodationRequest.getEndDate());
+        if (nonNull(request.getEndDate())) {
+            accommodation.setEndDate(request.getEndDate());
         }
-
-        if (nonNull(updateAccommodationRequest.getQuantity())) {
-            accommodation.setQuantity(updateAccommodationRequest.getQuantity());
+        if (nonNull(request.getQuantity())) {
+            accommodation.setQuantity(request.getQuantity());
         }
-        if (nonNull(updateAccommodationRequest.getPrice())) {
-            accommodation.setPrice(updateAccommodationRequest.getPrice().doubleValue());
+        if (nonNull(request.getPrice())) {
+            accommodation.setPrice(request.getPrice().doubleValue());
+        }
+        if (nonNull(request.getComment())) {
+            accommodation.setComment(request.getComment());
+        }
+        if (nonNull(request.getClientName()) || nonNull(request.getClientPhoneNumber())) {
+            Client client = getOrCreateClient(request.getClientName(), request.getClientPhoneNumber());
+            accommodation.setClient(clientMapper.toClientEntity(client));
         }
 
         accommodationRepository.save(accommodation);
@@ -184,6 +181,28 @@ public class AccommodationServiceImpl implements AccommodationService {
         AccommodationStatisticsManager statisticsManager = new AccommodationStatisticsManager(startDate, endDate, rooms);
 
         return statisticsManager.getStatistics(date);
+    }
+
+    private Client getOrCreateClient(String clientName, String phoneNumber) {
+        return findClientByName(clientName)
+                .or(() -> findClientByPhoneNumber(phoneNumber))
+                .orElse(createClient(clientName, phoneNumber));
+    }
+
+    private Optional<Client> findClientByName(String clientName) {
+        return isNotEmpty(clientName) ? clientService.findFirstByName(clientName) : Optional.empty();
+    }
+
+    private Optional<Client> findClientByPhoneNumber(String phoneNumber) {
+        return isNotEmpty(phoneNumber) ? clientService.findFirstByPhoneNumber(phoneNumber) : Optional.empty();
+    }
+
+    private Client createClient(String clientName, String phoneNumber) {
+        Client creationRequest = Client.builder()
+                .name(clientName)
+                .phoneNumber(phoneNumber)
+                .build();
+        return clientService.saveClient(creationRequest);
     }
 
 }
