@@ -7,27 +7,27 @@ import com.grimels.lazurcityapi.model.Accommodation;
 import com.grimels.lazurcityapi.model.request.CreateAccommodationRequest;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
 public interface AccommodationMapper {
 
     Accommodation fromAccommodationEntity(AccommodationEntity accommodationEntity);
 
-    AccommodationEntity toAccommodationEntity(Accommodation accommodation);
-
-    default AccommodationEntity toAccommodationEntity(CreateAccommodationRequest createAccommodationRequest,
-                                                      ClientEntity clientEntity,
-                                                      RoomEntity roomEntity) {
-        AccommodationEntity entity = new AccommodationEntity();
-        entity.setClient(clientEntity);
-        entity.setRoom(roomEntity);
-        entity.setStartDate(createAccommodationRequest.getStartDate());
-        entity.setEndDate(createAccommodationRequest.getEndDate());
-        entity.setPrice(createAccommodationRequest.getPrice().doubleValue());
-        entity.setQuantity(createAccommodationRequest.getQuantity());
-        entity.setComment(createAccommodationRequest.getComment());
-
-        return entity;
-    }
+    @Mapping(source = "clientEntity", target = "client")
+    @Mapping(source = "roomEntity", target = "room")
+    @Mapping(source = "request.startDate", target = "startDate")
+    @Mapping(source = "request.endDate", target = "endDate")
+    @Mapping(source = "request.price", target = "price")
+    @Mapping(source = "request.quantity", target = "quantity")
+    @Mapping(source = "request.comment", target = "comment")
+    @Mapping(source = "request.isFinal", target = "isFinal")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "modifiedDate", ignore = true)
+    AccommodationEntity toAccommodationEntity(CreateAccommodationRequest request,
+                                              ClientEntity clientEntity,
+                                              RoomEntity roomEntity);
 
 }

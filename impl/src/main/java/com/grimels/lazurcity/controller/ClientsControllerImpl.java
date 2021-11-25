@@ -6,11 +6,9 @@ import com.grimels.lazurcity.service.ClientService;
 import com.grimels.lazurcityapi.controller.ClientsController;
 import com.grimels.lazurcityapi.model.Client;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 
 import java.util.List;
 
-@Data
 @AllArgsConstructor
 public class ClientsControllerImpl implements ClientsController {
 

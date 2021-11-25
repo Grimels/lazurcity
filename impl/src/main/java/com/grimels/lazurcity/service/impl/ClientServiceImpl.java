@@ -16,11 +16,10 @@ import java.util.stream.Collectors;
 
 @Service
 @Data
-@AllArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
-    private ClientRepository clientRepository;
-    private ClientMapper clientMapper;
+    private final ClientRepository clientRepository;
+    private final ClientMapper clientMapper;
 
     @Override
     public List<Client> findAll() {

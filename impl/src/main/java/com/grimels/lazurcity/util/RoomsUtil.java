@@ -13,7 +13,7 @@ public class RoomsUtil {
     public static Boolean isBusyRoom(RoomEntity roomEntity) {
         LocalDate currentDate = LocalDate.now();
         return emptyIfNull(roomEntity.getAccommodationList()).stream()
-                .anyMatch(accommodation -> accommodation.getStartDate().isBefore(currentDate)
+                .anyMatch(accommodation -> (accommodation.getStartDate().isBefore(currentDate) || accommodation.getStartDate().isEqual(currentDate))
                         && accommodation.getEndDate().isAfter(currentDate));
     }
 

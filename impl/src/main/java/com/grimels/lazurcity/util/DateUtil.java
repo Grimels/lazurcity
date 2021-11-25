@@ -11,19 +11,6 @@ import java.util.function.Predicate;
 @UtilityClass
 public class DateUtil {
 
-    public static Comparator<Accommodation> compareAccommodationsByStartDate() {
-        return (a1, a2) -> {
-            LocalDate startDate1 = a1.getStartDate();
-            LocalDate startDate2 = a2.getStartDate();
-
-            return startDate1.compareTo(startDate2);
-        };
-    }
-
-    public static boolean isDateInDateRange(LocalDate date, LocalDate startRange, LocalDate endRange) {
-        return date.isAfter(startRange) && date.isBefore(endRange);
-    }
-
     public static Predicate<AccommodationEntity> isAccommodationInDateRange(LocalDate startRange, LocalDate endRange) {
         return (accommodation) -> {
             LocalDate startDate = accommodation.getStartDate();

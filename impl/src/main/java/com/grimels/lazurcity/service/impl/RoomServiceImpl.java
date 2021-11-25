@@ -20,12 +20,11 @@ import java.util.stream.Collectors;
 
 @Service
 @Data
-@AllArgsConstructor
 public class RoomServiceImpl implements RoomService {
 
-    private RoomRepository roomRepository;
-    private RoomMapper roomMapper;
-    private AccommodationMapper accommodationMapper;
+    private final RoomRepository roomRepository;
+    private final RoomMapper roomMapper;
+    private final AccommodationMapper accommodationMapper;
 
     @Override
     public List<Room> findAll() {

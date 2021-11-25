@@ -1,8 +1,5 @@
 package com.grimels.lazurcity.service.impl;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import com.grimels.lazurcity.entity.AccommodationEntity;
 import com.grimels.lazurcity.entity.ClientEntity;
 import com.grimels.lazurcity.entity.RoomEntity;
@@ -32,33 +29,26 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
 @Data
-@AllArgsConstructor
 public class AccommodationServiceImpl implements AccommodationService {
 
-    private AccommodationRepository accommodationRepository;
-    private ClientService clientService;
-    private ClientRepository clientRepository;
-    private RoomRepository roomRepository;
-    private AccommodationMapper accommodationMapper;
-    private RoomMapper roomMapper;
-    private ClientMapper clientMapper;
-    private AccommodationValidator accommodationValidator;
+    private final AccommodationRepository accommodationRepository;
+    private final ClientService clientService;
+    private final ClientRepository clientRepository;
+    private final RoomRepository roomRepository;
+    private final AccommodationMapper accommodationMapper;
+    private final RoomMapper roomMapper;
+    private final ClientMapper clientMapper;
+    private final AccommodationValidator accommodationValidator;
 
     @Override
     public List<Accommodation> findAll() {
@@ -109,6 +99,7 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .roomName(accommodation.getRoom().getName())
                 .quantity(accommodation.getQuantity())
                 .roomId(accommodation.getRoom().getId())
+                .isFinal(accommodation.getIsFinal())
                 .build();
     }
 
@@ -161,6 +152,9 @@ public class AccommodationServiceImpl implements AccommodationService {
         }
         if (nonNull(request.getComment())) {
             accommodation.setComment(request.getComment());
+        }
+        if (nonNull(request.getIsFinal())) {
+            accommodation.setIsFinal(request.getIsFinal());
         }
         if (nonNull(request.getClientName()) || nonNull(request.getClientPhoneNumber())) {
             Client client = getOrCreateClient(request.getClientName(), request.getClientPhoneNumber());

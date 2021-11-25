@@ -3,6 +3,7 @@ package com.grimels.lazurcity;
 import com.grimels.lazurcity.controller.AccommodationsControllerImpl;
 import com.grimels.lazurcity.controller.ClientsControllerImpl;
 import com.grimels.lazurcity.controller.RoomsControllerImpl;
+import com.grimels.lazurcity.controller.UserControllerImpl;
 import com.grimels.lazurcity.mapper.AccommodationMapper;
 import com.grimels.lazurcity.mapper.ClientMapper;
 import com.grimels.lazurcity.mapper.RoomMapper;
@@ -19,6 +20,9 @@ import com.grimels.lazurcity.validation.AccommodationValidator;
 import com.grimels.lazurcityapi.controller.AccommodationsController;
 import com.grimels.lazurcityapi.controller.ClientsController;
 import com.grimels.lazurcityapi.controller.RoomsController;
+import com.grimels.lazurcityapi.controller.UserController;
+import com.grimels.lazurcityapi.model.user.UserCredentials;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -81,6 +85,17 @@ public class LazurcityConfig {
     @Bean
     public AccommodationsController accommodationsController(AccommodationService accommodationService) {
         return new AccommodationsControllerImpl(accommodationService);
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "signin.user")
+    public UserCredentials userCredentials() {
+        return new UserCredentials();
+    }
+
+    @Bean
+    public UserController userController(UserCredentials userCredentials) {
+        return new UserControllerImpl(userCredentials);
     }
 
 }

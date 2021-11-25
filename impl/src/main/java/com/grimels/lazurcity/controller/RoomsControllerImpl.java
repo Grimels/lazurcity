@@ -6,12 +6,10 @@ import com.grimels.lazurcity.service.RoomService;
 import com.grimels.lazurcityapi.controller.RoomsController;
 import com.grimels.lazurcityapi.model.Room;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 
 import java.util.List;
 import java.util.Set;
 
-@Data
 @AllArgsConstructor
 public class RoomsControllerImpl implements RoomsController {
 
