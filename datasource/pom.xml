@@ -4,11 +4,11 @@
     <parent>
         <groupId>com.grimels</groupId>
         <artifactId>lazurcity-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
     <artifactId>lazurcity-datasource</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>LazurCity :: DataSource</name>
     <description>Hotel Management System :: DataSource</description>
     <dependencies>

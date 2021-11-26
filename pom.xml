@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.grimels</groupId>
     <artifactId>lazurcity-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>LazurCity :: Parent</name>
     <description>Hotel Management System :: Parent</description>
     <packaging>pom</packaging>
@@ -27,7 +27,7 @@
     <scm>
         <developerConnection>scm:git:git@github.com:Grimels/lazurcity.git</developerConnection>
         <connection>scm:git:git@github.com:Grimels/lazurcity.git</connection>
-        <tag>lazurcity-parent-1.0.0</tag>
+        <tag>${project.version}</tag>
     </scm>
 
     <modules>

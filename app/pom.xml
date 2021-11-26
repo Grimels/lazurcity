@@ -4,11 +4,11 @@
     <parent>
         <groupId>com.grimels</groupId>
         <artifactId>lazurcity-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
     <artifactId>lazurcity-app</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>LazurCity :: Application</name>
     <description>Hotel Management System :: Application</description>
     <dependencies>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.grimels</groupId>
             <artifactId>lazurcity-impl</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
