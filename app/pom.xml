@@ -7,10 +7,13 @@
         <version>1.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
+
     <artifactId>lazurcity-app</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <name>LazurCity :: Application</name>
     <description>Hotel Management System :: Application</description>
+    <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -43,6 +46,10 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
